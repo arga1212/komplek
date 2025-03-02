@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security System</title>
+    <script>
+        function sendSOS(type) {
+            fetch('/sos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: type })
+            }).then(response => response.json())
+              .then(data => alert(data.status));
+        }
+
+        function toggleLamp(state) {
+            fetch('/lampu', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ state: state })
+            }).then(response => response.json())
+              .then(data => alert(data.status));
+        }
+
+        function checkFire() {
+            fetch('/fire_detected')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.fire_detected ? "Kebakaran terdeteksi!" : "Tidak ada kebakaran.");
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Security System</h1>
+    <h2>Emergency SOS</h2>
+    <button onclick="sendSOS('tindak_kriminal')">Tindak Kriminal</button>
+    <button onclick="sendSOS('bencana_alam')">Bencana Alam</button>
+    <button onclick="sendSOS('darurat_kesehatan')">Darurat Kesehatan</button>
+    
+    <h2>Kontrol Lampu</h2>
+    <button onclick="toggleLamp('on')">Lampu ON</button>
+    <button onclick="toggleLamp('off')">Lampu OFF</button>
+    
+    <h2>Status Sensor Api</h2>
+    <button onclick="checkFire()">Cek Kebakaran</button>
+    
+    <h2>Live CCTV</h2>
+    <img id="cctv" src="/cctv" width="640" height="480">
+</body>
+</html>
